@@ -37,7 +37,7 @@ public:
     //拷贝赋值
     Array &operator=(const Array &rSelf);
 
-    //取值
+    //取元素
     T &operator[](size_t pos) { return array[pos]; }
 
     size_t resetLen() {}

@@ -2,7 +2,7 @@
 #include "Array.h"
 
 template<class T>
-Array<T> &Array<T>::operator=(const Array &rSelf) {
+Array<T> &Array<T>::operator=(const Array<T> &rSelf) {
     if (this == &rSelf || this->array == rSelf.array)
         return *this;
     this->array.reset(rSelf.array.get());
