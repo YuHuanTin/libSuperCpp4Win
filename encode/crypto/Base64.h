@@ -1,9 +1,10 @@
-//src from:https://www.boost.org/doc/libs/1_66_0/boost/beast/core/detail/base64.hpp
+// src from: https://www.boost.org/doc/libs/1_66_0/boost/beast/core/detail/base64.hpp
 
 #ifndef LIBSUPERCPP4WIN_BASE64_H
 #define LIBSUPERCPP4WIN_BASE64_H
 
 #include <string>
+
 class Base64 {
 private:
     inline static

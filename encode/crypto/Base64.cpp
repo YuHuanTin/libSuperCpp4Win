@@ -4,6 +4,7 @@ char const *Base64::get_alphabet() {
     static char constexpr tab[] = {"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"};
     return &tab[0];
 }
+
 signed char const *Base64::get_inverse() {
     static signed char constexpr tab[] = {
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, //   0-15
@@ -25,6 +26,7 @@ signed char const *Base64::get_inverse() {
     };
     return &tab[0];
 }
+
 std::size_t Base64::encode(void *dest, const void *src, std::size_t len) {
     char *out = static_cast<char *>(dest);
     char const *in = static_cast<char const *>(src);
@@ -57,6 +59,7 @@ std::size_t Base64::encode(void *dest, const void *src, std::size_t len) {
 
     return out - static_cast<char *>(dest);
 }
+
 std::pair<std::size_t, std::size_t> Base64::decode(void *dest, const char *src, std::size_t len) {
     char *out = static_cast<char *>(dest);
     auto in = reinterpret_cast<unsigned char const *>(src);
@@ -92,15 +95,19 @@ std::pair<std::size_t, std::size_t> Base64::decode(void *dest, const char *src, 
             *out++ = c3[j];
     }
 
-    return {out - static_cast<char *>(dest),
-            in - reinterpret_cast<unsigned char const *>(src)};
+    return {
+            out - static_cast<char *>(dest),
+            in - reinterpret_cast<unsigned char const *>(src)
+    };
 }
+
 std::string Base64::base64_encode(const std::uint8_t *data, std::size_t len) {
     std::string dest;
     dest.resize(encoded_size(len));
     dest.resize(encode(&dest[0], data, len));
     return dest;
 }
+
 std::string Base64::base64_decode(const std::string &data) {
     std::string dest;
     dest.resize(decoded_size(data.size()));
