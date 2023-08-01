@@ -7,7 +7,8 @@ find_package(fmt CONFIG REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 #add_definitions("-DNOT_CHECK_OUT_RANGE=false")
 
-add_executable(libSuperCpp4Win enhance/array/Array.h run.cpp)
+add_executable(libSuperCpp4Win enhance/array/Array.h run.cpp
+        enhance/buffer/Buffer.h)
 
 
 target_link_libraries(libSuperCpp4Win fmt::fmt)

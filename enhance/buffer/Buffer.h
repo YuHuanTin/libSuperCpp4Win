@@ -10,20 +10,44 @@ public:
 
     }
 
+    T *getCurrentElement() {
+        return m_buffer + m_currentPostion;
+    }
+
+    std::size_t getCurrnetPos() {
+        return m_currentPostion;
+    }
+
+    std::size_t getMaxPos() {
+        return m_maxPostion;
+    }
+
     template<typename GetType>
     GetType read() {
         GetType type1;
-        type1 = *(GetType *)(m_buffer + m_currentPostion);
+        type1 = *(GetType *) (m_buffer + m_currentPostion);
         m_currentPostion += sizeof(GetType);
         return type1;
     }
 
     template<std::size_t GetBytes>
     void read(T *Ptr) {
-        for (std::size_t i = 0; i < GetBytes; ++i) {
+        read(Ptr, GetBytes);
+//        for (std::size_t i = 0; i < GetBytes; ++i) {
+//            *(Ptr + i) = *(m_buffer + m_currentPostion + i);
+//        }
+//        m_currentPostion += GetBytes;
+    }
+
+    void read(T *Ptr, std::size_t Count) {
+        for (std::size_t i = 0; i < Count; ++i) {
             *(Ptr + i) = *(m_buffer + m_currentPostion + i);
         }
-        m_currentPostion += GetBytes;
+        m_currentPostion += Count;
+    }
+
+    void skip(std::size_t Count) {
+        m_currentPostion += Count;
     }
 
     bool eof() {
