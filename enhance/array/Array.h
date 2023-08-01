@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <memory>
+#include <stdexcept>
 
 
 template<typename T>
