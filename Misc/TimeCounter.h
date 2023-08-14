@@ -1,3 +1,5 @@
+
+
 #ifndef LIBSUPERCPP4WIN_TIMECOUNTER_H
 #define LIBSUPERCPP4WIN_TIMECOUNTER_H
 
@@ -5,14 +7,12 @@
 
 class TimeCounter {
 public:
-    TimeCounter() {
-        timePoint = std::chrono::steady_clock::now();
-    }
-    void reset() {
-        timePoint = std::chrono::steady_clock::now();
-    }
+    TimeCounter() noexcept;
+
+    void reset() noexcept;
+
     template<typename TimeDuration>
-    long long getDiff() {
+    constexpr long long getDiff() noexcept {
         auto diff = std::chrono::duration_cast<TimeDuration>(std::chrono::steady_clock::now() - timePoint).count();
         timePoint = std::chrono::steady_clock::now();
         return diff;
