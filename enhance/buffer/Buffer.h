@@ -10,24 +10,24 @@ class Buffer {
 public:
     Buffer() = delete;
 
-    Buffer(T *Ptr, std::size_t Count) : m_buffer(Ptr), m_maxPostion(Count) {
+    constexpr Buffer(T *Ptr, std::size_t Count) : m_buffer(Ptr), m_maxPostion(Count) {
 
     }
 
-    T *getCurrentElement() {
+    constexpr T *getCurrentElement() const noexcept {
         return m_buffer + m_currentPostion;
     }
 
-    std::size_t getCurrnetPos() {
+    [[nodiscard]] constexpr std::size_t getCurrnetPos() const noexcept {
         return m_currentPostion;
     }
 
-    std::size_t getMaxPos() {
+    [[nodiscard]] constexpr std::size_t getMaxPos() const noexcept {
         return m_maxPostion;
     }
 
     template<typename GetType>
-    GetType read() {
+    constexpr GetType read() noexcept {
         GetType type1;
         type1 = *(GetType *) (m_buffer + m_currentPostion);
         m_currentPostion += sizeof(GetType);
@@ -35,28 +35,27 @@ public:
     }
 
     template<std::size_t GetBytes>
-    void read(T *Ptr) {
+    constexpr void read(T *Ptr) noexcept {
         read(Ptr, GetBytes);
     }
 
-    void read(T *Ptr, std::size_t Count) {
+    constexpr void read(T *Ptr, std::size_t Count) noexcept {
         for (std::size_t i = 0; i < Count; ++i) {
             *(Ptr + i) = *(m_buffer + m_currentPostion + i);
         }
         m_currentPostion += Count;
     }
 
-    void skip(std::size_t Count) {
+    constexpr void skip(std::size_t Count) noexcept {
         m_currentPostion += Count;
     }
 
-    bool eof() {
+    [[nodiscard]] constexpr bool eof() const noexcept {
         if (m_currentPostion >= m_maxPostion) {
             return true;
         }
         return false;
     }
-
 private:
     T *const m_buffer = nullptr;
     std::size_t m_currentPostion = 0;
