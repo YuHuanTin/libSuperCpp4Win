@@ -1,5 +1,5 @@
-#ifndef LIBSUPERCPP4WIN_ARRAY_H
-#define LIBSUPERCPP4WIN_ARRAY_H
+#ifndef LIBSUPERCPP4WIN_ARRAY_HPP
+#define LIBSUPERCPP4WIN_ARRAY_HPP
 
 #include <algorithm>
 #include <cstddef>
@@ -240,4 +240,4 @@ private:
 };
 
 
-#endif //LIBSUPERCPP4WIN_ARRAY_H
+#endif //LIBSUPERCPP4WIN_ARRAY_HPP

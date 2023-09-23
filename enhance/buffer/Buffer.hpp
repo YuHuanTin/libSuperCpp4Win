@@ -1,5 +1,5 @@
-#ifndef LIBSUPERCPP4WIN_BUFFER_H
-#define LIBSUPERCPP4WIN_BUFFER_H
+#ifndef LIBSUPERCPP4WIN_BUFFER_HPP
+#define LIBSUPERCPP4WIN_BUFFER_HPP
 
 
 #include <cstddef>
@@ -172,4 +172,4 @@ private:
     size_t m_maxPostion     = 0;
 };
 
-#endif //LIBSUPERCPP4WIN_BUFFER_H
+#endif //LIBSUPERCPP4WIN_BUFFER_HPP

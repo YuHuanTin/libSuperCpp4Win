@@ -4,6 +4,12 @@
 您是否在急于测试时，发现得从头写一个测试demo而烦恼呢？
 没关系，有精C++模块，解决您的麻烦，赶快下载吧(现在第一版还未开发完成)
 
+已完成
+
+- [ ] [Array](enhance/array/Array.hpp)
+- [x] [Buffer](enhance/buffer/Buffer.hpp)
+- [x] [计时器](misc/TimeCounter.hpp)
+
 目前计划
 1. TCP、HTTP(S)
 2. 二进制操作(getBit、setBit等)
