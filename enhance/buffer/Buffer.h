@@ -27,7 +27,7 @@ private:
 public:
     Buffer() = delete;
 
-    constexpr Buffer(T *Begin, T *End) : m_buffer(Begin), m_maxPostion(std::distance(Begin, End)) {}
+    constexpr Buffer(T *Begin, T *End) : Buffer(Begin, std::advance(Begin, End)) {}
 
     constexpr Buffer(T *Ptr, size_t Count) : m_buffer(Ptr), m_maxPostion(Count) {}
 
@@ -56,7 +56,6 @@ public:
         Right.m_maxPostion     = 0;
         return *this;
     }
-
 
     [[nodiscard]] constexpr size_t getCurrnetPos() const noexcept {
         return m_currentPostion;
