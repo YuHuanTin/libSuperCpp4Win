@@ -1,8 +1,5 @@
 #include "CodeCvt.h"
 
-using std::string;
-using std::wstring;
-using std::unique_ptr;
 
 std::optional<std::string> CodeCvt::WstrToStr(const std::wstring &Src, UINT CodePage) noexcept {
     if (Src.empty())
@@ -18,7 +15,7 @@ std::optional<std::string> CodeCvt::WstrToStr(const std::wstring &Src, UINT Code
     );
     if (byteSize <= 0)
         return std::nullopt;
-    string szResult(byteSize, 0);
+    std::string szResult(byteSize, 0);
     WideCharToMultiByte(CodePage,
                         NULL,
                         Src.c_str(),
@@ -44,7 +41,7 @@ std::optional<std::wstring> CodeCvt::StrToWstr(const std::string &Src, UINT Code
     );
     if (charSize <= 0)
         return std::nullopt;
-    wstring wszResult(charSize, 0);
+    std::wstring wszResult(charSize, 0);
     MultiByteToWideChar(CodePage,
                         NULL,
                         Src.c_str(),
@@ -55,7 +52,7 @@ std::optional<std::wstring> CodeCvt::StrToWstr(const std::string &Src, UINT Code
     return wszResult;
 }
 
-unique_ptr<char[]> CodeCvt::WstrToStr(wchar_t *Src, UINT CodePage) noexcept {
+std::unique_ptr<char[]> CodeCvt::WstrToStr(wchar_t *Src, UINT CodePage) noexcept {
     int byteSize = WideCharToMultiByte(CodePage,
                                        NULL,
                                        Src,
@@ -67,7 +64,7 @@ unique_ptr<char[]> CodeCvt::WstrToStr(wchar_t *Src, UINT CodePage) noexcept {
     );
     if (byteSize <= 0)
         return {};
-    unique_ptr<char[]> Dst = std::make_unique<char[]>(byteSize);
+    std::unique_ptr<char[]> Dst = std::make_unique<char[]>(byteSize);
     WideCharToMultiByte(CodePage,
                         NULL,
                         Src,
@@ -80,7 +77,7 @@ unique_ptr<char[]> CodeCvt::WstrToStr(wchar_t *Src, UINT CodePage) noexcept {
     return Dst;
 }
 
-unique_ptr<wchar_t[]> CodeCvt::StrToWstr(char *Src, UINT CodePage) noexcept {
+std::unique_ptr<wchar_t[]> CodeCvt::StrToWstr(char *Src, UINT CodePage) noexcept {
     // 以字符为单位
     int charSize = MultiByteToWideChar(CodePage,
                                        NULL,
@@ -91,7 +88,7 @@ unique_ptr<wchar_t[]> CodeCvt::StrToWstr(char *Src, UINT CodePage) noexcept {
     );
     if (charSize <= 0)
         return {};
-    unique_ptr<wchar_t[]> Dst = std::make_unique<wchar_t[]>(charSize);
+    std::unique_ptr<wchar_t[]> Dst = std::make_unique<wchar_t[]>(charSize);
     MultiByteToWideChar(CodePage,
                         NULL,
                         Src,

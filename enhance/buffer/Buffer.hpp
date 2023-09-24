@@ -3,6 +3,8 @@
 
 
 #include <cstddef>
+#include <iterator>
+#include <stdexcept>
 
 
 /**

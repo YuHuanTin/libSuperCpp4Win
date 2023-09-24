@@ -8,12 +8,14 @@
 
 
 namespace CodeCvt {
-    //used for string
+    // used for std::string
     std::optional<std::string> WstrToStr(const std::wstring &Src, UINT CodePage = CP_ACP) noexcept;
+
     std::optional<std::wstring> StrToWstr(const std::string &Src, UINT CodePage = CP_ACP) noexcept;
 
-    //used for char *
+    // used for char * with end char '\0'
     std::unique_ptr<char[]> WstrToStr(wchar_t *Src, UINT CodePage = CP_ACP) noexcept;
+
     std::unique_ptr<wchar_t[]> StrToWstr(char *Src, UINT CodePage = CP_ACP) noexcept;
 }
 #endif //LIBSUPERCPP4WIN_CODECVT_H
