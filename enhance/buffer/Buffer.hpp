@@ -23,13 +23,24 @@ private:
      */
     template<typename CheckType = T>
     constexpr void check_out_of_range(size_t ElementCount) const {
-        if (m_currentPostion + ElementCount * sizeof(CheckType) > m_maxPostion) throw std::runtime_error("out of range");
+        if (m_currentPostion + ElementCount * sizeof(CheckType) > m_maxPostion)
+            throw std::runtime_error("out of range");
+    }
+
+    template<typename TransferType>
+    constexpr TransferType *transfer_type_ptr(size_t Offset) const {
+        /// check if out of range
+        check_out_of_range<TransferType>(1);
+
+
+        /// transfer type ptr
+        return reinterpret_cast<std::remove_reference_t<TransferType> *>(m_buffer + Offset);
     }
 
 public:
     Buffer() = delete;
 
-    constexpr Buffer(T *Begin, T *End) : Buffer(Begin, std::advance(Begin, End)) {}
+    constexpr Buffer(T *Begin, T *End) : Buffer(Begin, std::distance(Begin, End)) {}
 
     constexpr Buffer(T *Ptr, size_t Count) : m_buffer(Ptr), m_maxPostion(Count) {}
 
@@ -38,9 +49,9 @@ public:
             return *this;
         }
 
-        m_buffer         = Right.m_buffer;
+        m_buffer = Right.m_buffer;
         m_currentPostion = Right.m_currentPostion;
-        m_maxPostion     = Right.m_maxPostion;
+        m_maxPostion = Right.m_maxPostion;
         return *this;
     }
 
@@ -49,13 +60,13 @@ public:
             return *this;
         }
 
-        m_buffer         = Right.m_buffer;
+        m_buffer = Right.m_buffer;
         m_currentPostion = Right.m_currentPostion;
-        m_maxPostion     = Right.m_maxPostion;
+        m_maxPostion = Right.m_maxPostion;
 
-        Right.m_buffer         = nullptr;
+        Right.m_buffer = nullptr;
         Right.m_currentPostion = 0;
-        Right.m_maxPostion     = 0;
+        Right.m_maxPostion = 0;
         return *this;
     }
 
@@ -68,31 +79,28 @@ public:
     }
 
     /**
-     * 获取当前位置的 T 元素
+     * 获取当前位置的 T 元素，而不增加位移
      * @return 
      */
     constexpr T &getCurrentElement() const {
-        check_out_of_range(1);
-
-        return *reinterpret_cast<T *>(m_buffer + m_currentPostion);
+        return *transfer_type_ptr<T>(m_currentPostion);
     }
 
     /**
-     * 从当前位置读取一个 ReadType 元素
+     * 从当前位置读取一个 ReadType 元素，并增加位移
      * @tparam ReadType 
      * @return 
      */
     template<typename ReadType>
     constexpr ReadType read() {
-        check_out_of_range<ReadType>(1);
+        auto ptr = transfer_type_ptr<ReadType>(m_currentPostion);
 
-        auto *readTypePtr = reinterpret_cast<ReadType *>(m_buffer + m_currentPostion);
-        next<uint8_t>(sizeof(ReadType));
-        return *readTypePtr;
+        next<ReadType>(1);
+        return *ptr;
     }
 
     /**
-     * 读取 ElementCount 个元素到 Ptr 为起始地址的空间
+     * 读取 ElementCount 个元素到 Ptr 为起始地址的空间，并增加位移
      * @tparam ElementCount 
      * @param Ptr 
      * @return 
@@ -103,7 +111,7 @@ public:
     }
 
     /**
-     * 读取 ElementCount 个元素到 Ptr 为起始地址的空间
+     * 读取 ElementCount 个元素到 Ptr 为起始地址的空间，并增加位移
      * @param Ptr 
      * @param ElementCount 
      * @return 
@@ -116,19 +124,23 @@ public:
     }
 
     /**
-     * 在当前位置写入 WriteType 类型的值
+     * 在当前位置写入 WriteType 类型的值，并增加位移
      * @tparam WriteType 
      * @param WriteValue 
      */
     template<typename WriteType>
     void write(WriteType &&WriteValue) {
-        check_out_of_range<WriteType>(1);
+        *transfer_type_ptr<WriteType>(m_currentPostion) = WriteValue;
 
-        auto *writeTypePtr = reinterpret_cast<WriteType * >(m_buffer + m_currentPostion);
-        *writeTypePtr = WriteValue;
         next<WriteType>(1);
     }
 
+    /**
+     * 在当前位置写入 Count 个 WriteType 类型的值，并增加位移
+     * @tparam WriteType 
+     * @param Ptr 
+     * @param Count 
+     */
     template<typename WriteType>
     void write(WriteType *Ptr, size_t Count) {
         check_out_of_range<WriteType>(Count);
@@ -137,9 +149,15 @@ public:
         next<WriteType>(Count);
     }
 
+    /**
+     * 在当前位置写入 Begin 到 End 的 WriteType 类型的值，并增加位移
+     * @tparam WriteType 
+     * @param Begin 
+     * @param End 
+     */
     template<typename WriteType>
     void write(WriteType *Begin, WriteType *End) {
-        write(Begin, std::advance(Begin, End));
+        write(Begin, std::distance(Begin, End));
     }
 
     /**
@@ -164,14 +182,35 @@ public:
         m_currentPostion += Count * sizeof(NextType);
     }
 
+    /**
+     * 移动 T 类型指针到 Pos 位置
+     * @param Pos 
+     * @return 
+     */
+    constexpr void moveTo(size_t Pos) noexcept {
+        m_currentPostion = Pos;
+    }
+
+    /**
+     * 重置指针位置到 0
+     * @return 
+     */
+    constexpr void reset() noexcept {
+        m_currentPostion = 0;
+    }
+
+    /**
+     * 检测是否已经处理到结束位置
+     * @return 
+     */
     [[nodiscard]] constexpr bool eof() const {
         return m_currentPostion >= m_maxPostion;
     }
 
 private:
-    T      *m_buffer        = nullptr;
+    T *m_buffer = nullptr;
     size_t m_currentPostion = 0;
-    size_t m_maxPostion     = 0;
+    size_t m_maxPostion = 0;
 };
 
 #endif //LIBSUPERCPP4WIN_BUFFER_HPP

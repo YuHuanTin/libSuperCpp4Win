@@ -18,7 +18,7 @@ public:
     }
 
     template<typename TimeDuration = std::chrono::milliseconds>
-    constexpr long long getDiff() noexcept {
+    constexpr size_t getDiff() noexcept {
         auto diff = std::chrono::duration_cast<TimeDuration>(std::chrono::steady_clock::now() - timePoint).count();
         timePoint = std::chrono::steady_clock::now();
         return diff;
