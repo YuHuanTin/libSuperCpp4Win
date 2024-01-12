@@ -1,4 +1,7 @@
 # libSuperCpp4Win
+
+需要 C++ 20 标准
+
 精C++模块
 您是否因为重复造轮子而烦恼呢？ 
 您是否在急于测试时，发现得从头写一个测试demo而烦恼呢？
@@ -9,6 +12,7 @@
 - [ ] [Array](enhance/array/Array.hpp)
 - [x] [Buffer](enhance/buffer/Buffer.hpp)
 - [x] [计时器](misc/TimeCounter.hpp)
+- [x] [简易线程池](thread/ThreadPool.h)
 
 目前计划
 1. TCP、HTTP(S)
